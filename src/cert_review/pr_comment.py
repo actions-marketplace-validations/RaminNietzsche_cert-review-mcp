@@ -10,6 +10,24 @@ from . import __version__
 
 MARKER = "<!-- cert-review -->"
 
+FOOTER_VIA_LABELS = {
+    "pull_request_target": "pull_request_target",
+    "mcp": "MCP",
+    "github-action": "GitHub Action",
+}
+
+
+def github_footer_markdown(*, via: str = "pull_request_target") -> str:
+    """Collapsible attribution for automated PR comments (Actions / MCP)."""
+    label = FOOTER_VIA_LABELS.get(via, via)
+    return (
+        "\n<details>\n"
+        "<summary>cert-review-mcp · auto-generated</summary>\n\n"
+        "Report drafted with **[cert-review-mcp](https://github.com/RaminNietzsche/cert-review-mcp)** "
+        f"(`{label}`). Findings are candidates; project QA and human review still apply.\n\n"
+        "</details>\n"
+    )
+
 _STYLE_CHECKS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bif\("), "Prefer `if (` — Ceph CodingStyle spacing after keywords."),
     (re.compile(r"\bfor\("), "Prefer `for (` — spacing after keywords."),
@@ -128,6 +146,7 @@ def pr_review_markdown(
     packet: dict[str, Any] | None = None,
     functional_notes: list[str] | None = None,
     root: str | None = None,
+    github_footer: str | bool | None = None,
 ) -> str:
     """Markdown PR comment: static table + heuristic hints + style nits."""
     find = (check_result or {}).get("findings") or []
@@ -227,4 +246,8 @@ def pr_review_markdown(
             f"{n_cert} CERT finding(s) on changed lines — review each before merge."
         )
     lines.append("")
-    return "\n".join(lines)
+    body = "\n".join(lines)
+    if github_footer:
+        via = "pull_request_target" if github_footer is True else str(github_footer)
+        body += github_footer_markdown(via=via)
+    return body

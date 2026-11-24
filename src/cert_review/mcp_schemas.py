@@ -19,6 +19,10 @@ Review flow:
 3. validate_findings to drop ungrounded findings.
 4. format_findings to draft markdown, GitHub or GitLab review payloads, SARIF or GitLab reports.
    format_pr_review merges check_diff + build_review_packet into one PR comment with hints and style nits.
+   review_pr and format_pr_review accept github_footer (pull_request_target, mcp, github-action) for
+   collapsible attribution; markdown starts with <!-- cert-review --> for comment upsert in CI.
+Fork CI: docs/action.md and ci/github/pr-cert-review-mcp.yml — pull_request_target, checkout head SHA,
+docker run --entrypoint cert-review review-pr (Hub image entrypoint is cert-review-mcp).
 Use absolute paths and profile "ceph" for Ceph trees. A tool status "partial" or non-empty
 warnings means some files did not compile or timed out, so a clean result is not proof.
 MISRA C:2012, MISRA C++:2023 and AUTOSAR C++14: pass `standard` to the lookup tools or

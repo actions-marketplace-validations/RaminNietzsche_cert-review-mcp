@@ -142,6 +142,14 @@ def main(argv: list[str] | None = None) -> int:
     rp.add_argument("--title")
     rp.add_argument("--scope")
     rp.add_argument("--diff-context", type=int, default=None)
+    rp.add_argument(
+        "--github-footer",
+        nargs="?",
+        const="pull_request_target",
+        default=None,
+        metavar="VIA",
+        help="append collapsible cert-review-mcp footer (via: pull_request_target, mcp, github-action)",
+    )
     _common(rp)
     rp.set_defaults(profile="ceph", min_confidence=0.5)
 
@@ -257,6 +265,7 @@ def main(argv: list[str] | None = None) -> int:
             a.repo, a.base, a.head, profile=a.profile, title=a.title, scope=a.scope,
             compdb=a.compdb, tools=tools, min_confidence=a.min_confidence,
             standards=_stds(a), diff_context=a.diff_context,
+            github_footer=a.github_footer,
         )
         if a.report:
             _write_report(res, a.report)

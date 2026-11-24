@@ -46,7 +46,9 @@ def test_dockerfile_pins_the_measured_toolchain():
 
 def test_workflows_and_templates_are_valid_yaml():
     for p in (".github/workflows/self-test.yml", "examples/github-workflow.yml",
-              "ci/gitlab/cert-review.gitlab-ci.yml", "ci/github/cert-review.yml"):
+              "examples/github-workflow-pull-request-target-comment.yml",
+              "ci/gitlab/cert-review.gitlab-ci.yml", "ci/github/cert-review.yml",
+              "ci/github/pr-cert-review-mcp.yml"):
         assert yaml.safe_load((ROOT / p).read_text()), p
     gl = yaml.safe_load((ROOT / "ci/gitlab/cert-review.gitlab-ci.yml").read_text())
     assert set(gl["cert-review"]["artifacts"]["reports"]) == {"codequality", "sast"}

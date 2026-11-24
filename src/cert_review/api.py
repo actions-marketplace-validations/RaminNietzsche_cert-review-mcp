@@ -103,6 +103,7 @@ def format_pr_review(
     packet: dict | None = None,
     functional_notes: list[str] | None = None,
     root: str | None = None,
+    github_footer: str | bool | None = None,
 ) -> dict:
     """Format a GitHub/GitLab-ready PR comment with static results, hints and style nits."""
     from . import pr_comment as PC
@@ -112,6 +113,7 @@ def format_pr_review(
         title=title, scope=scope, profile=profile,
         check_result=check_result, packet=pkt,
         functional_notes=functional_notes, root=root or (check_result or {}).get("root"),
+        github_footer=github_footer,
     )
     from . import __version__ as ver
     return {"markdown": body, "profile": profile, "version": ver}
@@ -134,6 +136,7 @@ def review_pr(
     functional_notes: list[str] | None = None,
     include_packet: bool = True,
     include_check: bool = True,
+    github_footer: str | bool | None = None,
 ) -> dict:
     """One-shot PR review: check_diff + build_review_packet + format_pr_review."""
     prof = P.load(profile)
@@ -156,6 +159,7 @@ def review_pr(
     fr = format_pr_review(
         title=title, scope=scope, profile=profile,
         check_result=ck, packet=pkt, functional_notes=functional_notes, root=repo,
+        github_footer=github_footer,
     )
     out: dict[str, Any] = {
         "markdown": fr["markdown"],

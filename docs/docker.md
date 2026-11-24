@@ -59,10 +59,23 @@ Keep `-i` (stdio needs it) and do not add `-t` (a TTY corrupts the JSON-RPC stre
 
 ## CLI from the same image
 
+The image **ENTRYPOINT** is `cert-review-mcp`. For the CLI, override the entrypoint:
+
 ```bash
 docker run --rm -v "$PWD:$PWD" -w "$PWD" --entrypoint cert-review cert-review-mcp \
   diff --repo "$PWD" --base origin/main --format markdown
 ```
+
+Draft a full PR comment (static + packet hints, same as MCP `review_pr`):
+
+```bash
+docker run --rm -v "$PWD:$PWD" -w "$PWD" --entrypoint cert-review raminnietzsche/cert-review-mcp:latest \
+  review-pr --repo "$PWD" --base origin/main --profile ceph \
+  --github-footer mcp -o /tmp/cert-comment.md
+```
+
+GitHub Actions on a fork: see [action.md](action.md#pr-comment-on-pull_request_target-fork-mirrors) and
+`ci/github/pr-cert-review-mcp.yml`.
 
 ## Check that it works
 

@@ -156,6 +156,9 @@ Diff mode on pull requests, SARIF, a job summary, and optional inline review com
 and SAST reports. Inputs, outputs and examples: [docs/action.md](docs/action.md),
 [examples/github-workflow.yml](examples/github-workflow.yml).
 
+Fork PR comment (MCP-style markdown via `review-pr` + Docker Hub): 
+[examples/github-workflow-pull-request-target-comment.yml](examples/github-workflow-pull-request-target-comment.yml).
+
 ## MCP tools
 
 Every tool is read-only: it reads local files and bundled data and runs local analyzers.

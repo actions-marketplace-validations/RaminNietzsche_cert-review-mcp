@@ -2,6 +2,38 @@
 
 ## Unreleased
 
+## 1.4.4 (2026-11-23)
+
+### Added
+
+- Tests: `tests/test_github_footer.py` (API, CLI, workflow YAML, server.json),
+  MCP schema checks for `github_footer`, `tiny_git_repo` fixture in conftest.
+
+### Fixed
+
+- `pyproject.toml` version aligned with `__version__` (1.4.3).
+
+## 1.4.3 (2026-11-23)
+
+### Added
+
+- MCP **`review_pr`**: `github_footer` parameter (parity with CLI / `format_pr_review`).
+- Docs: `pull_request_target` fork workflow (`docs/action.md`, `docs/docker.md` entrypoint note).
+- Canonical workflow copy under `ci/github/pr-cert-review-mcp.yml`.
+
+### Fixed
+
+- Example workflow aligned with production fork CI (`--entrypoint cert-review`, `find-comment` upsert).
+
+## 1.4.2 (2026-11-23)
+
+### Added
+
+- `format_pr_review` / `review-pr` optional **`github_footer`** (`pull_request_target`, `mcp`,
+  `github-action`): collapsible cert-review-mcp attribution for automated PR comments.
+- Example workflow `examples/github-workflow-pull-request-target-comment.yml` (same trigger style
+  as Ceph `pr-triage.yml`: `pull_request_target` + upsert via `<!-- cert-review -->`).
+
 ## 1.4.1 (2026-11-22)
 
 ### Fixed

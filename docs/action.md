@@ -14,6 +14,23 @@
 
 A complete workflow is in [examples/github-workflow.yml](../examples/github-workflow.yml).
 
+### PR comment on `pull_request_target` (fork mirrors)
+
+For a personal fork (same repo PRs with `pull-requests: write`), you can post the same markdown
+as MCP `review_pr` / `format_pr_review` using the published Docker image:
+
+- Trigger: `pull_request_target` (like Ceph `pr-triage.yml`), checkout `pull_request.head.sha`,
+  `fetch-depth: 0`.
+- Run: `docker run --entrypoint cert-review … review-pr` — the Hub image **entrypoint is
+  `cert-review-mcp` (stdio)**; without `--entrypoint cert-review` the CLI never runs.
+- Pin `raminnietzsche/cert-review-mcp:latest` (or a version tag after `docker-publish` finishes).
+- Upsert: `peter-evans/find-comment` on `<!-- cert-review -->`, then `create-or-update-comment`
+  with `comment-id` (`body-includes` alone is not a valid input on v4).
+- Optional: `review-pr --github-footer pull_request_target` (v1.4.2+).
+
+Canonical workflow: [examples/github-workflow-pull-request-target-comment.yml](../examples/github-workflow-pull-request-target-comment.yml)
+or [ci/github/pr-cert-review-mcp.yml](../ci/github/pr-cert-review-mcp.yml).
+
 How it runs: `action.yml` is a composite action. It builds the repository's `Dockerfile`
 (Debian 13, clang/clang-tidy 19.1.7-3+b1, cppcheck 2.17.1-2, Semgrep 1.186.0, the toolchain behind
 [accuracy.md](accuracy.md)) and runs `python -m cert_review.action` in it on your workspace.

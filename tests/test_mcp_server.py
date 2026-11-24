@@ -65,6 +65,32 @@ def test_annotations_and_titles():
         assert all(v.get("description") for v in props.values()), t.name
 
 
+def test_review_pr_tool_has_github_footer_param():
+    s = build_server()
+
+    async def go():
+        tools = await s.list_tools()
+        rp = next(t for t in tools if t.name == "review_pr")
+        schema = getattr(rp, "input_schema", None) or rp.model_dump(by_alias=True).get("inputSchema", {})
+        return schema.get("properties", {})
+
+    props = asyncio.run(go())
+    assert "github_footer" in props
+    assert "pull_request_target" in props["github_footer"].get("description", "")
+
+
+def test_format_pr_review_tool_has_github_footer_param():
+    s = build_server()
+
+    async def go():
+        tools = await s.list_tools()
+        fp = next(t for t in tools if t.name == "format_pr_review")
+        schema = getattr(fp, "input_schema", None) or fp.model_dump(by_alias=True).get("inputSchema", {})
+        return schema.get("properties", {})
+
+    assert "github_footer" in asyncio.run(go())
+
+
 def test_prompts_forbid_posting():
     s = build_server()
 

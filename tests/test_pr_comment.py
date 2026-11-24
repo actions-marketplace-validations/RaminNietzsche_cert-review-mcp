@@ -37,3 +37,15 @@ def test_format_pr_review_includes_sections():
     assert "ERR57-CPP" in md
     assert "errno_returns" in md
     assert "from_remote_zone" in md
+
+
+def test_format_pr_review_github_footer():
+    out = format_pr_review(
+        check_result={"findings": [], "warnings": [], "tools": []},
+        packet={"hunks": []},
+        github_footer="pull_request_target",
+    )
+    md = out["markdown"]
+    assert "cert-review-mcp · auto-generated" in md
+    assert "pull_request_target" in md
+    assert "<!-- cert-review -->" in md
